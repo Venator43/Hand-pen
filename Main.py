@@ -43,9 +43,9 @@ class OCR:
 			crop_img = letterDrawned[i[1]:i[1]+i[3], i[0]:i[0]+i[2]]
 			crop_img = cv2.cvtColor(crop_img,cv2.COLOR_BGR2GRAY)
 			crop_img = cv2.resize(crop_img, (28,28), interpolation=cv2.INTER_LINEAR)
-			crop_img = crop_img[..., np.newaxis]
 			crop_img = crop_img.astype('float32')
 			crop_img = crop_img/255.0
+			crop_img = crop_img[..., np.newaxis]
 			letterList.append(crop_img)
 			letterObject = LetterObject()
 			letterObject.letter = crop_img
@@ -81,7 +81,7 @@ changeColor = False
 OCR = OCR()
 letterDetected = []
 
-with mp_hands.Hands(min_detection_confidence = 0.7, min_tracking_confidence = 0.5, static_image_mode = False) as hands:
+with mp_hands.Hands(min_detection_confidence = 0.85, min_tracking_confidence = 0.75, static_image_mode = False) as hands:
 	while True:
 		success, img = cap.read()
 		
@@ -164,6 +164,8 @@ with mp_hands.Hands(min_detection_confidence = 0.7, min_tracking_confidence = 0.
 					changeColor = False
 	
 				color = colorArray[colorIndex]
+		else: 
+			x1,x2,y1,y2 = -1, -1, -1, -1
 
 		if cv2.waitKey(10) & 0xFF == ord('c'):
 			imageDrawned = []
